@@ -27,7 +27,10 @@ This extension defines 3 cross-validator classes and 1 function:
 - `gap_train_test_split`
 
 The three classes can all be passed, as the `cv` argument, to the `cross_val_score` function in `scikit-learn`, just like the native cross-validator classes in `scikit-learn`.
+
 The one function is an alternative to the `train_test_split` function in `scikit-learn`.
+
+## Examples
 
 The following example uses `GapKFold` instead of `KFold` as the cross-validator.
 ```python
