@@ -2,9 +2,10 @@ import warnings
 import numbers
 from math import ceil, floor, modf
 from abc import ABCMeta, abstractmethod
+from itertools import chain
 
 import numpy as np
-from sklearn.utils import indexable
+from sklearn.utils import indexable, safe_indexing
 from sklearn.utils.validation import _num_samples
 
 
