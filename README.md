@@ -1,22 +1,15 @@
+![](train-gap-test.svg)
+
 # TSCV: Time Series Cross-Validation
 
 This repository is a [scikit-learn](https://scikit-learn.org) extension for time series cross-validation.
 It introduces gaps between the training set and the test set, which mitigates the temporal dependence of time series and prevents information leak.
 
-![train gap test](train-gap-test.svg)
-
 ## Installation
 
-This repository is not registered, but you can clone it into your own project and use it with ease.
-
 ```bash
-git clone https://github.com/WenjieZ/TSCV.git tscv
-mkdir YOURPROJECT/tscv
-cp tscv/split.py YOURPROJECT/tscv/split.py
-cp tscv/__init__.py YOURPROJECT/tscv/__init__
+pip install tscv
 ```
-
-`YOURPROJECT` is the name of your project folder.
 
 ## Usage
 
