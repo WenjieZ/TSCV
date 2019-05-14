@@ -58,14 +58,18 @@ X_train, X_test, y_train, y_test = gap_train_test_split(X, y, test_size=2, gap_s
 ```
 
 ## Support
-See the doc [here](http://www.zhengwenjie.net/tscv/).
+See the documentation [here](http://www.zhengwenjie.net/tscv/).
 
 If you need any further help, please use the issue tracker.
 
-## Authors and acknowledgment
-This extension is mainly developed by Wenjie Zheng.
+## Authors
+This extension is mainly developed by me, Wenjie Zheng.
 
 The `GapWalkForward` cross-validator is adapted from the `TimeSeriesSplit` of `scikit-learn`.
+
+## Acknowledgment
+- I would like to thank Christoph Bergmeir, Prabir Burman, and Jeffrey Racine for the helpful discussion.
+- I would like to thank Jacques Joubert for encouraging me to develop this package.
 
 ## License
 BSD-3-Clause
