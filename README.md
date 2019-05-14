@@ -14,7 +14,7 @@ pip install tscv
 ## Usage
 
 This extension defines 3 cross-validator classes and 1 function:
-- `GapLeaevPOut`
+- `GapLeavePOut`
 - `GapKFold`
 - `GapWalkForward`
 - `gap_train_test_split`
