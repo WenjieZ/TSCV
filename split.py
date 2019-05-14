@@ -3,20 +3,54 @@ import numbers
 from math import ceil, floor, modf
 from abc import ABCMeta, abstractmethod
 from itertools import chain
+from inspect import signature
 
 import numpy as np
 from sklearn.utils import indexable, safe_indexing
 from sklearn.utils.validation import _num_samples
-
+from sklearn.base import _pprint
 
 __all__ = ['GapCrossValidator',
            'GapLeavePOut',
-           'GapKFold',
+           'Gapold',
            'GapWalkForward',
            'gap_train_test_split']
 
 
 SINGLETON_WARNING = "Too few samples. Some training set is a singleton."
+
+
+def _build_repr(self):
+    # XXX This is copied from BaseEstimator's get_params
+    cls = self.__class__
+    init = getattr(cls.__init__, 'deprecated_original', cls.__init__)
+    # Ignore varargs, kw and default values and pop self
+    init_signature = signature(init)
+    # Consider the constructor parameters excluding 'self'
+    if init is object.__init__:
+        args = []
+    else:
+        args = sorted([p.name for p in init_signature.parameters.values()
+                       if p.name != 'self' and p.kind != p.VAR_KEYWORD])
+    class_name = self.__class__.__name__
+    params = dict()
+    for key in args:
+        # We need deprecation warnings to always be on in order to
+        # catch deprecated param values.
+        # This is set in utils/__init__.py but it gets overwritten
+        # when running under python3 somehow.
+        warnings.simplefilter("always", DeprecationWarning)
+        try:
+            with warnings.catch_warnings(record=True) as w:
+                value = getattr(self, key, None)
+            if len(w) and w[0].category == DeprecationWarning:
+                # if the parameter is deprecated, don't show it
+                continue
+        finally:
+            warnings.filters.pop(0)
+        params[key] = value
+
+    return '%s(%s)' % (class_name, _pprint(params, offset=len(class_name)))
 
 
 class GapCrossValidator(metaclass=ABCMeta):
@@ -426,7 +460,7 @@ def gap_train_test_split(*arrays, **options):
 
 
 class GapWalkForward(GapCrossValidator):
-    """Time Series cross-validator
+    """
     Provides train/test indices to split time series data samples
     that are observed at fixed time intervals, in train/test sets.
     In each split, test indices must be higher than before.
@@ -437,7 +471,7 @@ class GapWalkForward(GapCrossValidator):
     training sets are supersets of those that come before them.
     Parameters
     ----------
-    n_splits : int, default=3
+    n_splits : int, default=5
         Number of splits. Must be at least 2.
     max_train_size : int, optional
         Maximum size for a single training set.
@@ -495,9 +529,13 @@ class GapWalkForward(GapCrossValidator):
     """
     def __init__(self, n_splits=5, max_train_size=None, test_size=None,
                  gap_size=0):
+        self.n_splits=n_splits
         self.max_train_size = max_train_size
         self.test_size = test_size
         self.gap_size = gap_size
+
+    def get_n_splits(self):
+        return self.n_splits
 
     def split(self, X, y=None, groups=None):
         """Generate indices to split data into training and test set.
