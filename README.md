@@ -13,7 +13,7 @@ This repository is not registered, but you can clone it into your own project an
 git clone https://github.com/WenjieZ/TSCV.git tscv
 mkdir YOURPROJECT/tscv
 cp tscv/split.py YOURPROJECT/tscv/split.py
-cp tscv/__init__.py YOURPROJECT/tscv/__init__.py
+cp tscv/__init__.py YOURPROJECT/tscv/__init__
 ```
 
 `YOURPROJECT` is the name of your project folder.
@@ -55,10 +55,13 @@ X_train, X_test, y_train, y_test = gap_train_test_split(X, y, test_size=2, gap_s
 ```
 
 ## Support
-If you need any help, please use the issue tracker.
+See the doc [here](http://www.zhengwenjie.net/tscv/).
+
+If you need any further help, please use the issue tracker.
 
 ## Authors and acknowledgment
 This extension is mainly developed by Wenjie Zheng.
+
 The `GapWalkForward` cross-validator is adapted from the `TimeSeriesSplit` of `scikit-learn`.
 
 ## License
