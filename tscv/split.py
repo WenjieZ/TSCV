@@ -185,7 +185,7 @@ class GapLeavePOut(GapCrossValidator):
     Examples
     --------
     >>> import numpy as np
-    >>> from sklearn.model_selection import GapLeavePOut
+    >>> from tscv import GapLeavePOut
     >>> glpo = GapLeavePOut(2, 1, 1)
     >>> glpo.get_n_splits([0, 1, 2, 3, 4])
     4
@@ -276,7 +276,7 @@ class GapKFold(GapCrossValidator):
     Examples
     --------
     >>> import numpy as np
-    >>> from sklearn.model_selection import GapKFold
+    >>> from tscv import GapKFold
     >>> kf = GapKFold(n_splits=5, gap_before=3, gap_after=4)
     >>> kf.get_n_splits(np.arange(10))
     5
@@ -391,7 +391,7 @@ def gap_train_test_split(*arrays, **options):
     Examples
     --------
     >>> import numpy as np
-    >>> from sklearn.model_selection import gap_train_test_split
+    >>> from tscv import gap_train_test_split
     >>> X, y = np.arange(10).reshape((5, 2)), range(5)
     >>> X
     array([[0, 1],
@@ -484,14 +484,14 @@ class GapWalkForward(GapCrossValidator):
     Examples
     --------
     >>> import numpy as np
-    >>> from sklearn.model_selection import TimeSeriesSplit
+    >>> from tscv import GapWalkForward
     >>> X = np.array([[1, 2], [3, 4], [1, 2], [3, 4], [1, 2], [3, 4]])
     >>> y = np.array([1, 2, 3, 4, 5, 6])
-    >>> tscv = TimeSeriesSplit(n_splits=5)
-    >>> print(tscv)  # doctest: +NORMALIZE_WHITESPACE
-    TimeSeriesSplit(gap_size=0, max_train_size=None, n_splits=5,
+    >>> cv = GapWalkForward(n_splits=5)
+    >>> print(cv)  # doctest: +NORMALIZE_WHITESPACE
+    GapWalkForward(gap_size=0, max_train_size=None, n_splits=5,
                     test_size=None)
-    >>> for train_index, test_index in tscv.split(X):
+    >>> for train_index, test_index in cv.split(X):
     ...    print("TRAIN:", train_index, "TEST:", test_index)
     ...    X_train, X_test = X[train_index], X[test_index]
     ...    y_train, y_test = y[train_index], y[test_index]
@@ -503,8 +503,8 @@ class GapWalkForward(GapCrossValidator):
     >>> # Fix test_size to 2 with 12 samples
     >>> X = np.random.randn(12, 2)
     >>> y = np.random.randint(0, 2, 12)
-    >>> tscv = TimeSeriesSplit(n_splits=3, test_size=2)
-    >>> for train_index, test_index in tscv.split(X):
+    >>> cv = GapWalkForward(n_splits=3, test_size=2)
+    >>> for train_index, test_index in cv.split(X):
     ...    print("TRAIN:", train_index, "TEST:", test_index)
     ...    X_train, X_test = X[train_index], X[test_index]
     ...    y_train, y_test = y[train_index], y[test_index]
@@ -512,8 +512,8 @@ class GapWalkForward(GapCrossValidator):
     TRAIN: [0 1 2 3 4 5 6 7] TEST: [8 9]
     TRAIN: [0 1 2 3 4 5 6 7 8 9] TEST: [10 11]
     >>> # Add in a 2 period gap
-    >>> tscv = TimeSeriesSplit(n_splits=3, test_size=2, gap_size=2)
-    >>> for train_index, test_index in tscv.split(X):
+    >>> cv = GapWalkForward(n_splits=3, test_size=2, gap_size=2)
+    >>> for train_index, test_index in cv.split(X):
     ...    print("TRAIN:", train_index, "TEST:", test_index)
     ...    X_train, X_test = X[train_index], X[test_index]
     ...    y_train, y_test = y[train_index], y[test_index]
