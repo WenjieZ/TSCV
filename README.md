@@ -63,6 +63,10 @@ See the documentation [here](http://www.zhengwenjie.net/tscv/).
 
 If you need any further help, please use the issue tracker.
 
+## Contributing
+- Report bugs in the issue tracker
+- Express your use cases in the issue tracker
+
 ## Authors
 This extension is mainly developed by me, Wenjie Zheng.
 
