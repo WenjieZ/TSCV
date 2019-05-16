@@ -11,6 +11,14 @@ It introduces **gaps** between the training set and the test set, which mitigate
 pip install tscv
 ```
 
+## Update
+
+```bash
+pip install tscv --upgrade
+```
+
+I recommend you to update it often.
+
 ## Usage
 
 This extension defines 3 cross-validator classes and 1 function:
