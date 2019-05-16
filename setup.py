@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tscv",
-    version="0.0.1",
+    version="0.0.3",
     author="Wenjie Zheng",
     author_email="work@zhengwenjie.net",
     description="Time series cross-validation",
@@ -24,10 +24,5 @@ setuptools.setup(
                  'Operating System :: POSIX',
                  'Operating System :: Unix',
                  'Operating System :: MacOS',
-                 'Programming Language :: Python :: 3',
-                 'Programming Language :: Python :: 3.5',
-                 'Programming Language :: Python :: 3.6',
-                 'Programming Language :: Python :: 3.7',
                   ],
-    python_requires=">=3.5"
 )
