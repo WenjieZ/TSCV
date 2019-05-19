@@ -12,7 +12,7 @@ from sklearn.base import _pprint
 
 __all__ = ['GapCrossValidator',
            'GapLeavePOut',
-           'Gapold',
+           'GapKFold',
            'GapWalkForward',
            'gap_train_test_split']
 
