@@ -66,15 +66,15 @@ If you need any further help, please use the issue tracker.
 ## Contributing
 - Report bugs in the issue tracker
 - Express your use cases in the issue tracker
+- Support me at scikit-learn/scikit-learn#13761 if you want to see this extension merged in scikit-learn
 
 ## Authors
-This extension is mainly developed by me, Wenjie Zheng.
+This extension is mainly developed by Wenjie Zheng.
 
-The `GapWalkForward` cross-validator is adapted from the `TimeSeriesSplit` of `scikit-learn`.
+The `GapWalkForward` cross-validator is adapted from the `TimeSeriesSplit` of `scikit-learn` (see Kyle Kosic's PR scikit-learn/scikit-learn#13204).
 
-## Acknowledgment
+## Acknowledgments
 - I would like to thank Christoph Bergmeir, Prabir Burman, and Jeffrey Racine for the helpful discussion.
-- I would like to thank Jacques Joubert for encouraging me to develop this package.
 
 ## License
 BSD-3-Clause
