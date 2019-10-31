@@ -534,7 +534,7 @@ class GapWalkForward(GapCrossValidator):
         self.test_size = test_size
         self.gap_size = gap_size
 
-    def get_n_splits(self):
+    def get_n_splits(self, X=None, y=None, groups=None):
         return self.n_splits
 
     def split(self, X, y=None, groups=None):
