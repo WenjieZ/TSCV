@@ -3,7 +3,7 @@
 # TSCV: Time Series Cross-Validation
 
 This repository is a [scikit-learn](https://scikit-learn.org) extension for time series cross-validation.
-It introduces **gaps** between the training set and the test set, which mitigates the temporal dependence of time series and prevents information leak.
+It introduces **gaps** between the training set and the test set, which mitigates the temporal dependence of time series and prevents information leakage.
 
 ## Installation
 
@@ -69,7 +69,7 @@ If you need any further help, please use the issue tracker.
 - Support me at scikit-learn/scikit-learn#13761 if you want to see this extension merged in scikit-learn
 
 ## Authors
-This extension is mainly developed by Wenjie Zheng.
+This extension is developed mainly by Wenjie Zheng.
 
 The `GapWalkForward` cross-validator is adapted from the `TimeSeriesSplit` of `scikit-learn` (see Kyle Kosic's PR scikit-learn/scikit-learn#13204).
 
