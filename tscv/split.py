@@ -568,7 +568,7 @@ class GapWalkForward(GapCrossValidator):
                 ("Cannot have number of folds ={0} greater"
                  " than the number of samples: {1}.").format(n_folds,
                                                              n_samples))
-        if n_samples - gap_size - (test_size * n_splits) <= 0:
+        if n_samples - test_size * n_splits < 0:
             raise ValueError(
                 ("Too many splits ={0} for number of samples"
                  " ={1} with test_size ={2} and gap_size ={3}."
