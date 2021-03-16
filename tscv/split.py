@@ -574,8 +574,8 @@ class GapWalkForward(GapCrossValidator):
         if first_test < 0:
             raise ValueError(
                 ("Too many splits ={0} for number of samples"
-                 " ={1} with test_size ={2}, gap_size ={3}, rollback_size ={4}."
-                 "").format(n_splits, n_samples, test_size, gap_size, rollback_size))
+                 " ={1} with test_size ={2} and rollback_size ={3}."
+                 "").format(n_splits, n_samples, test_size, rollback_size))
 
         indices = np.arange(n_samples)
         test_starts = range(first_test, n_samples, test_size - rollback_size)[0:n_splits]
