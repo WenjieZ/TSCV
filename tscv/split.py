@@ -17,7 +17,7 @@ __all__ = ['GapCrossValidator',
            'gap_train_test_split']
 
 
-SINGLETON_WARNING = "Too few samples. Some training set is a singleton."
+SINGLETON_WARNING = "Caution: some training set is a singleton."
 
 
 def _build_repr(self):
@@ -250,7 +250,7 @@ class GapLeavePOut(GapCrossValidator):
                 gap_before >= n_samples - self.p):
             raise ValueError("Not enough training samples available.")
         if n_samples - gap_after - self.p <= gap_before + 1:
-            warnings.warn(SINGLETON_WARNING, Warning)
+            print(SINGLETON_WARNING)
 
 
 class GapKFold(GapCrossValidator):
