@@ -7,7 +7,7 @@ from inspect import signature
 
 import numpy as np
 from sklearn.utils import indexable, safe_indexing
-from sklearn.utils.validation import _num_samples
+from sklearn.utils.validation import _num_samples, check_consistent_length
 from sklearn.base import _pprint
 
 __all__ = ['GapCrossValidator',
@@ -423,12 +423,16 @@ def gap_train_test_split(*arrays, **options):
     n_arrays = len(arrays)
     if n_arrays == 0:
         raise ValueError("At least one array required as input")
+    check_consistent_length(*arrays)
     test_size = options.pop('test_size', None)
     train_size = options.pop('train_size', None)
     gap_size = options.pop('gap_size', 0)
+    if not isinstance(gap_size, numbers.Real):
+        raise TypeError("The gap size should be a real number.")
 
     if options:
-        raise TypeError("Invalid parameters passed: %s" % str(options))
+        raise TypeError("Invalid parameters passed: %s. \n"
+        "Check the spelling of keyword parameters." % str(options))
 
     arrays = indexable(*arrays)
     n_samples = _num_samples(arrays[0])
@@ -448,7 +452,11 @@ def gap_train_test_split(*arrays, **options):
         n_train = size_to_number(train_size, n_remain)
         n_test = n_remain - n_train
     else:
-        warnings.warn("Only test_size is taken into account.", Warning)
+        warnings.warn("The 'train_size' argument is overridden by 'test_size'; "
+                      "in case of nonzero 'gap_size', "
+                      "an explicit value should be provided "
+                      "and cannot be implied by '1 - train_size - test_size'.",
+                      Warning)
         n_test = size_to_number(test_size, n_remain)
         n_train = n_remain - n_test
 
