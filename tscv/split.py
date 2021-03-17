@@ -536,11 +536,12 @@ class GapWalkForward(GapCrossValidator):
     where ``n_samples`` is the number of samples.
     """
     def __init__(self, n_splits=5, max_train_size=None, test_size=None,
-                 gap_size=0):
+                 gap_size=0, rollback_size=0):
         self.n_splits=n_splits
         self.max_train_size = max_train_size
         self.test_size = test_size
         self.gap_size = gap_size
+        self.rollback_size = rollback_size
 
     def get_n_splits(self, X=None, y=None, groups=None):
         return self.n_splits
@@ -568,7 +569,10 @@ class GapWalkForward(GapCrossValidator):
         n_splits = self.n_splits
         n_folds = n_splits + 1
         gap_size = self.gap_size
+        rollback_size = self.rollback_size
         test_size = self.test_size if self.test_size else n_samples // n_folds
+        if rollback_size >= test_size:
+            raise ValueError("rollback_size should be strictly less than test_size")
 
         # Make sure we have enough samples for the given split parameters
         if n_folds > n_samples:
@@ -576,15 +580,15 @@ class GapWalkForward(GapCrossValidator):
                 ("Cannot have number of folds ={0} greater"
                  " than the number of samples: {1}.").format(n_folds,
                                                              n_samples))
-        if n_samples - gap_size - (test_size * n_splits) <= 0:
+        first_test = n_samples - (test_size - rollback_size) * n_splits - rollback_size
+        if first_test < 0:
             raise ValueError(
                 ("Too many splits ={0} for number of samples"
-                 " ={1} with test_size ={2} and gap_size ={3}."
-                 "").format(n_splits, n_samples, test_size, gap_size))
+                 " ={1} with test_size ={2} and rollback_size ={3}."
+                 "").format(n_splits, n_samples, test_size, rollback_size))
 
         indices = np.arange(n_samples)
-        test_starts = range(n_samples - n_splits * test_size,
-                            n_samples, test_size)
+        test_starts = range(first_test, n_samples, test_size - rollback_size)[0:n_splits]
 
         for test_start in test_starts:
             train_end = test_start - gap_size
@@ -592,5 +596,5 @@ class GapWalkForward(GapCrossValidator):
                 yield (indices[train_end - self.max_train_size:train_end],
                        indices[test_start:test_start + test_size])
             else:
-                yield (indices[:train_end],
+                yield (indices[:max(train_end,0)],
                        indices[test_start:test_start + test_size])
