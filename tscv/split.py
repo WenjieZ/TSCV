@@ -584,5 +584,5 @@ class GapWalkForward(GapCrossValidator):
                 yield (indices[train_end - self.max_train_size:train_end],
                        indices[test_start:test_start + test_size])
             else:
-                yield (indices[:train_end],
+                yield (indices[:max(train_end, 0)],
                        indices[test_start:test_start + test_size])
