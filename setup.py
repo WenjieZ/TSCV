@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tscv",
-    version="0.0.5-dev",
+    version="0.0.5-rc1",
     author="Wenjie Zheng",
     author_email="work@zhengwenjie.net",
     description="Time series cross-validation",
