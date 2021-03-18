@@ -6,9 +6,15 @@ from itertools import chain
 from inspect import signature
 
 import numpy as np
-from sklearn.utils import indexable, safe_indexing
+from sklearn.utils import indexable
 from sklearn.utils.validation import _num_samples, check_consistent_length
 from sklearn.base import _pprint
+try:
+    # See #12: this allows compatibility for scikit-learn >= 0.24
+    from sklearn.utils import _safe_indexing
+except ImportError:
+    from sklearn.utils import safe_indexing as _safe_indexing
+
 
 __all__ = ['GapCrossValidator',
            'GapLeavePOut',
@@ -432,7 +438,8 @@ def gap_train_test_split(*arrays, **options):
 
     if options:
         raise TypeError("Invalid parameters passed: %s. \n"
-        "Check the spelling of keyword parameters." % str(options))
+                        "Check the spelling of keyword parameters."
+                        % str(options))
 
     arrays = indexable(*arrays)
     n_samples = _num_samples(arrays[0])
@@ -452,10 +459,10 @@ def gap_train_test_split(*arrays, **options):
         n_train = size_to_number(train_size, n_remain)
         n_test = n_remain - n_train
     else:
-        warnings.warn("The 'train_size' argument is overridden by 'test_size'; "
-                      "in case of nonzero 'gap_size', "
+        warnings.warn("The train_size argument is overridden by test_size; "
+                      "in case of nonzero gap_size, "
                       "an explicit value should be provided "
-                      "and cannot be implied by '1 - train_size - test_size'.",
+                      "and cannot be implied by 1 - train_size - test_size.",
                       Warning)
         n_test = size_to_number(test_size, n_remain)
         n_train = n_remain - n_test
@@ -463,8 +470,8 @@ def gap_train_test_split(*arrays, **options):
     train = np.arange(n_train)
     test = np.arange(n_train + n_gap, n_samples)
 
-    return list(chain.from_iterable((safe_indexing(a, train),
-                                     safe_indexing(a, test)) for a in arrays))
+    return list(chain.from_iterable((_safe_indexing(a, train),
+                                     _safe_indexing(a, test)) for a in arrays))
 
 
 class GapWalkForward(GapCrossValidator):
@@ -496,7 +503,7 @@ class GapWalkForward(GapCrossValidator):
     >>> X = np.array([[1, 2], [3, 4], [1, 2], [3, 4], [1, 2], [3, 4]])
     >>> y = np.array([1, 2, 3, 4, 5, 6])
     >>> cv = GapWalkForward(n_splits=5)
-    >>> print(cv)  # doctest: +NORMALIZE_WHITESPACE
+    >>> print(cv)
     GapWalkForward(gap_size=0, max_train_size=None, n_splits=5,
                     test_size=None)
     >>> for train_index, test_index in cv.split(X):
@@ -537,7 +544,7 @@ class GapWalkForward(GapCrossValidator):
     """
     def __init__(self, n_splits=5, max_train_size=None, test_size=None,
                  gap_size=0, rollback_size=0):
-        self.n_splits=n_splits
+        self.n_splits = n_splits
         self.max_train_size = max_train_size
         self.test_size = test_size
         self.gap_size = gap_size
@@ -572,7 +579,8 @@ class GapWalkForward(GapCrossValidator):
         rollback_size = self.rollback_size
         test_size = self.test_size if self.test_size else n_samples // n_folds
         if rollback_size >= test_size:
-            raise ValueError("rollback_size should be strictly less than test_size")
+            raise ValueError(
+                "rollback_size should be strictly less than test_size")
 
         # Make sure we have enough samples for the given split parameters
         if n_folds > n_samples:
@@ -580,7 +588,8 @@ class GapWalkForward(GapCrossValidator):
                 ("Cannot have number of folds ={0} greater"
                  " than the number of samples: {1}.").format(n_folds,
                                                              n_samples))
-        first_test = n_samples - (test_size - rollback_size) * n_splits - rollback_size
+        first_test = n_samples - (test_size - rollback_size) * n_splits
+        first_test -= rollback_size
         if first_test < 0:
             raise ValueError(
                 ("Too many splits ={0} for number of samples"
@@ -588,7 +597,8 @@ class GapWalkForward(GapCrossValidator):
                  "").format(n_splits, n_samples, test_size, rollback_size))
 
         indices = np.arange(n_samples)
-        test_starts = range(first_test, n_samples, test_size - rollback_size)[0:n_splits]
+        test_starts = range(first_test, n_samples, test_size - rollback_size)
+        test_starts = test_starts[0:n_splits]
 
         for test_start in test_starts:
             train_end = test_start - gap_size
@@ -596,5 +606,5 @@ class GapWalkForward(GapCrossValidator):
                 yield (indices[train_end - self.max_train_size:train_end],
                        indices[test_start:test_start + test_size])
             else:
-                yield (indices[:max(train_end,0)],
+                yield (indices[:max(train_end, 0)],
                        indices[test_start:test_start + test_size])
