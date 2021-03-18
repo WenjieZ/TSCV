@@ -17,8 +17,6 @@ pip install tscv
 pip install tscv --upgrade
 ```
 
-I recommend you to update it often.
-
 ## Usage
 
 This extension defines 3 cross-validator classes and 1 function:
@@ -58,23 +56,35 @@ X, y = np.arange(20).reshape((10, 2)), np.arange(10)
 X_train, X_test, y_train, y_test = gap_train_test_split(X, y, test_size=2, gap_size=2)
 ```
 
-## Support
-See the documentation [here](http://www.zhengwenjie.net/tscv/).
-
-If you need any further help, please use the issue tracker.
-
 ## Contributing
 - Report bugs in the issue tracker
 - Express your use cases in the issue tracker
-- Support me at scikit-learn/scikit-learn#13761 if you want to see this extension merged in scikit-learn
 
 ## Authors
 This extension is developed mainly by Wenjie Zheng.
 
 The `GapWalkForward` cross-validator is adapted from the `TimeSeriesSplit` of `scikit-learn` (see Kyle Kosic's PR scikit-learn/scikit-learn#13204).
 
+## Support
+
+- If you want to support this project, please consider being a sponsor.
+- If you use this package in your research, please consider citing it in your paper.
+
 ## Acknowledgments
-- I would like to thank Christoph Bergmeir, Prabir Burman, and Jeffrey Racine for the helpful discussion.
+
+- I would like to thank Jeffrey Racine, Christoph Bergmeir, and Prabir Burman for the helpful discussion.
 
 ## License
 BSD-3-Clause
+
+## Citation
+
+```latex
+@article{zheng2019hv,
+  title={$ hv $-Block Cross Validation is not a BIBD: a Note on the Paper by Jeff Racine (2000)},
+  author={Zheng, Wenjie},
+  journal={arXiv preprint arXiv:1910.08904},
+  year={2019}
+}
+```
+
