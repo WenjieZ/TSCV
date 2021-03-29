@@ -476,8 +476,8 @@ def gap_train_test_split(*arrays, **options):
 
 
 @deprecated(
-    "It will be deprecated in v0.1.0 "
-    "in favor of the more flexible GapRollForward.")
+    "It will be replaced in v0.1.0 "
+    "by the more flexible GapRollForward.")
 class GapWalkForward(GapCrossValidator):
     """
     Provides train/test indices to split time series data samples
