@@ -8,6 +8,7 @@ from inspect import signature
 import numpy as np
 from sklearn.utils import indexable
 from sklearn.utils.validation import _num_samples, check_consistent_length
+from sklearn.utils.deprecation import deprecated
 from sklearn.base import _pprint
 try:
     # See #12: this allows compatibility for scikit-learn >= 0.24
@@ -474,6 +475,9 @@ def gap_train_test_split(*arrays, **options):
                                      _safe_indexing(a, test)) for a in arrays))
 
 
+@deprecated(
+    "It will be replaced in v0.1.0 "
+    "by the more flexible GapRollForward.")
 class GapWalkForward(GapCrossValidator):
     """
     Provides train/test indices to split time series data samples
