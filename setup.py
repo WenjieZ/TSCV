@@ -1,11 +1,14 @@
 import setuptools
+import tscv
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+
 setuptools.setup(
     name="tscv",
-    version="0.1.0-dev",
+    version=tscv.__version__,
     author="Wenjie Zheng",
     author_email="work@zhengwenjie.net",
     description="Time series cross-validation",
