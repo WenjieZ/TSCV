@@ -9,11 +9,7 @@ import numpy as np
 from sklearn.utils import indexable
 from sklearn.utils.validation import _num_samples, check_consistent_length
 from sklearn.base import _pprint
-try:
-    # See #12: this allows compatibility for scikit-learn >= 0.24
-    from sklearn.utils import _safe_indexing
-except ImportError:
-    from sklearn.utils import safe_indexing as _safe_indexing
+from sklearn.utils import _safe_indexing
 
 
 __all__ = ['GapCrossValidator',
@@ -27,7 +23,7 @@ SINGLETON_WARNING = "Too few samples. Some training set is a singleton."
 
 
 def _build_repr(self):
-    # XXX This is copied from BaseEstimator's get_params
+    # XXX This is ported from scikit-learn
     cls = self.__class__
     init = getattr(cls.__init__, 'deprecated_original', cls.__init__)
     # Ignore varargs, kw and default values and pop self
@@ -608,3 +604,40 @@ class GapWalkForward(GapCrossValidator):
             else:
                 yield (indices[:max(train_end, 0)],
                        indices[test_start:test_start + test_size])
+
+
+class GapRollForward(GapCrossValidator):
+    def __init__(self, min_train_size=0, max_train_size=np.inf,
+                 min_test_size=1, max_test_size=np.inf,
+                 gap_size=0, roll_size=None):
+        self.min_train_size = min_train_size
+        self.max_train_size = max_train_size
+        self.min_test_size = min_test_size
+        self.max_test_size = max_test_size
+        self.gap_size = gap_size
+        self.roll_size = max_test_size if roll_size is None else roll_size
+
+    def get_n_splits(self, X=None, y=None, groups=None):
+        n_samples = _num_samples(X)
+        a = self.min_train_size
+        b = self.min_test_size
+        c = self.gap_size
+        n_splits = int(max(0, (n_samples - a - b - c) // self.roll_size + 1))
+        if n_splits == 0:
+            warnings.warn("Not enough data for the input arguments.",
+                          Warning)
+        return n_splits
+
+    def split(self, X, y=None, groups=None):
+        X, y, groups = indexable(X, y, groups)
+        n_splits = self.get_n_splits(X, y, groups)
+        n_samples = _num_samples(X)
+        indices = np.arange(n_samples)
+
+        p = self.min_train_size
+        q = p + self.gap_size
+        while q + self.min_test_size <= n_samples:
+            yield (indices[max(p - self.max_train_size, 0):p],
+                   indices[q:min(q + self.max_test_size, n_samples)])
+            p += self.roll_size
+            q = p + self.gap_size
