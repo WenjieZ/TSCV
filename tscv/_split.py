@@ -574,23 +574,25 @@ class GapWalkForward(GapCrossValidator):
         gap_size = self.gap_size
         rollback_size = self.rollback_size
         test_size = self.test_size if self.test_size else n_samples // n_folds
-        if rollback_size >= test_size:
-            raise ValueError(
-                "rollback_size should be strictly less than test_size")
 
         # Make sure we have enough samples for the given split parameters
         if n_folds > n_samples:
             raise ValueError(
-                ("Cannot have number of folds ={0} greater"
-                 " than the number of samples: {1}.").format(n_folds,
-                                                             n_samples))
+                (f"Cannot have number of folds={n_folds} greater"
+                 f" than the number of samples={n_samples}."))
+
+        if rollback_size >= test_size:
+            raise ValueError(
+                (f"test_size={test_size} should be strictly "
+                 f"larger than rollback_size={rollback_size}"))
+
         first_test = n_samples - (test_size - rollback_size) * n_splits
         first_test -= rollback_size
         if first_test < 0:
             raise ValueError(
-                ("Too many splits ={0} for number of samples"
-                 " ={1} with test_size ={2} and rollback_size ={3}."
-                 "").format(n_splits, n_samples, test_size, rollback_size))
+                (f"Too many splits={n_splits} for number of samples"
+                 f"={n_samples} with test_size={test_size} and "
+                 f"rollback_size ={rollback_size}."))
 
         indices = np.arange(n_samples)
         test_starts = range(first_test, n_samples, test_size - rollback_size)
@@ -608,7 +610,7 @@ class GapWalkForward(GapCrossValidator):
 
 class GapRollForward(GapCrossValidator):
     def __init__(self, min_train_size=0, max_train_size=np.inf,
-                 min_test_size=1, max_test_size=np.inf,
+                 min_test_size=1, max_test_size=1,
                  gap_size=0, roll_size=None):
         self.min_train_size = min_train_size
         self.max_train_size = max_train_size
@@ -624,8 +626,7 @@ class GapRollForward(GapCrossValidator):
         c = self.gap_size
         n_splits = int(max(0, (n_samples - a - b - c) // self.roll_size + 1))
         if n_splits == 0:
-            warnings.warn("Not enough data for the input arguments.",
-                          Warning)
+            raise ValueError("No valid splits for the input arguments.")
         return n_splits
 
     def split(self, X, y=None, groups=None):
