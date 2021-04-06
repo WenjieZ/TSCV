@@ -573,7 +573,10 @@ class GapWalkForward(GapCrossValidator):
         n_folds = n_splits + 1
         gap_size = self.gap_size
         rollback_size = self.rollback_size
-        test_size = self.test_size if self.test_size else n_samples // n_folds
+        if self.test_size is not None:
+            test_size = self.test_size
+        else:
+            test_size = n_samples // n_folds
 
         # Make sure we have enough samples for the given split parameters
         if n_folds > n_samples:
