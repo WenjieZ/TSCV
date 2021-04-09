@@ -60,16 +60,6 @@ X_train, X_test, y_train, y_test = gap_train_test_split(X, y, test_size=2, gap_s
 - Report bugs in the issue tracker
 - Express your use cases in the issue tracker
 
-## Authors
-This extension is developed mainly by Wenjie Zheng.
-
-The `GapWalkForward` cross-validator is adapted from the `TimeSeriesSplit` of `scikit-learn` (see Kyle Kosic's PR scikit-learn/scikit-learn#13204).
-
-## Support
-
-- If you want to support this project, please consider being a sponsor.
-- If you use this package in your research, please consider citing it in your paper.
-
 ## Acknowledgments
 
 - I would like to thank Jeffrey Racine, Christoph Bergmeir, and Prabir Burman for the helpful discussion.
@@ -78,7 +68,6 @@ The `GapWalkForward` cross-validator is adapted from the `TimeSeriesSplit` of `s
 BSD-3-Clause
 
 ## Citation
-
 ```latex
 @article{zheng2019hv,
   title={$ hv $-Block Cross Validation is not a BIBD: a Note on the Paper by Jeff Racine (2000)},
@@ -87,4 +76,3 @@ BSD-3-Clause
   year={2019}
 }
 ```
-

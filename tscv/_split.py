@@ -1,3 +1,11 @@
+"""
+The :mod:`tscv._split` module includes classes and functions
+to split time series based on a preset strategy.
+"""
+
+# Author: Wenjie Zheng <work@zhengwenjie.net>
+# License: BSD 3 clause
+
 import warnings
 import numbers
 from math import ceil, floor, modf
@@ -56,7 +64,12 @@ def _build_repr(self):
 
 
 class GapCrossValidator(metaclass=ABCMeta):
-    """Base class for all gap cross-validators"""
+    """Base class for all gap cross-validators
+
+    Implementations must define one of the following 4 methods:
+    `_iter_train_indices`, `_iter_train_masks`,
+    `_iter_test_indices`, `_iter_test_masks`.
+    """
 
     def __init__(self, gap_before=0, gap_after=0):
         self.gap_before = gap_before
@@ -167,21 +180,21 @@ class GapCrossValidator(metaclass=ABCMeta):
 
 
 class GapLeavePOut(GapCrossValidator):
-    """Leave-P-Out cross-validator with Gap
+    """Leave-P-Out cross-validator with Gaps
 
     Provides train/test indices to split data in train/test sets. This results
     in testing on only contiguous samples of size p, while the remaining
-    samples (with the gap removed) form the training set in each iteration.
+    samples (with the gaps removed) form the training set in each iteration.
 
     Parameters
     ----------
     p : int
         Size of the test sets.
 
-    gap_before : int
+    gap_before : int, default=0
         Gap before the test sets.
 
-    gap_after : int
+    gap_after : int, default=0
         Gap after the test sets.
 
     Examples
@@ -256,7 +269,7 @@ class GapLeavePOut(GapCrossValidator):
 
 
 class GapKFold(GapCrossValidator):
-    """K-Folds cross-validator with Gap
+    """K-Folds cross-validator with Gaps
 
     Provides train/test indices to split data in train/test sets. Split
     dataset into k consecutive folds (without shuffling).
@@ -269,10 +282,10 @@ class GapKFold(GapCrossValidator):
     n_splits : int, default=5
         Number of folds. Must be at least 2.
 
-    gap_before : int
+    gap_before : int, default=0
         Gap before the test sets.
 
-    gap_after : int
+    gap_after : int, default=0
         Gap after the test sets.
 
     Examples
@@ -367,19 +380,19 @@ def gap_train_test_split(*arrays, **options):
         Allowed inputs are lists, numpy arrays, scipy-sparse
         matrices or pandas dataframes.
 
-    gap_size : float or int, (default=0)
+    gap_size : float or int, default=0
         If float, should be between 0.0 and 1.0 and represent the proportion
         of the dataset between the training and the test set. If int,
         represents the absolute number of the dropped samples.
 
-    test_size : float, int, or None, (default=None)
+    test_size : float, int, or None, default=None
         If float, should be between 0.0 and 1.0 and equal to
         test / (train + test). If int, represents the absolute number of
         test samples. If None, the value is set to the complement of the
         train size and the gap. If ``train_size`` is also None,
         it will be set to 0.25.
 
-    train_size : float, int, or None, (default=None)
+    train_size : float, int, or None, default=None
         If float, should be between 0.0 and 1.0 and equal to
         train / (train + test). If int, represents the absolute number of
         train samples. If None, the value is automatically set to
@@ -417,10 +430,8 @@ def gap_train_test_split(*arrays, **options):
     array([[8, 9]])
     >>> y_test
     [4]
-
     >>> gap_train_test_split(list(range(10)), gap_size=0.1)
     [[0, 1, 2, 3, 4, 5, 6], [8, 9]]
-
     """
     n_arrays = len(arrays)
     if n_arrays == 0:
@@ -470,28 +481,40 @@ def gap_train_test_split(*arrays, **options):
                                      _safe_indexing(a, test)) for a in arrays))
 
 
-class GapWalkForward(GapCrossValidator):
-    """
+class GapWalkForward:
+    """Legacy walk forward time series cross-validator
+
+    .. warning::
+        This utility is kept for backward compatibility.
+        For new code, the more flexible and thus powerful
+        ``GapRollForward`` is recommended.
+
     Provides train/test indices to split time series data samples
     that are observed at fixed time intervals, in train/test sets.
     In each split, test indices must be higher than before.
     This cross-validation object is a variation of K-Fold.
     In the kth split, it returns first k folds as train set and the
     (k+1)th fold as test set.
+
     Note that unlike standard cross-validation methods, successive
     training sets are supersets of those that come before them.
+
     Parameters
     ----------
     n_splits : int, default=5
         Number of splits. Must be at least 2.
-    max_train_size : int, optional
+
+    max_train_size : int, default=None
         Maximum size for a single training set.
-    test_size : int, optional
+
+    test_size : int, default=None
         Number of samples in each test set. Defaults to
         ``n_samples / (n_splits + 1)``.
+
     gap_size : int, default=0
         Number of samples to exclude from the end of each train set before
         the test set.
+
     Examples
     --------
     >>> import numpy as np
@@ -500,8 +523,8 @@ class GapWalkForward(GapCrossValidator):
     >>> y = np.array([1, 2, 3, 4, 5, 6])
     >>> cv = GapWalkForward(n_splits=5)
     >>> print(cv)
-    GapWalkForward(gap_size=0, max_train_size=None, n_splits=5,
-                    test_size=None)
+    GapWalkForward(gap_size=0, max_train_size=None, n_splits=5, rollback_size=0,
+            test_size=None)
     >>> for train_index, test_index in cv.split(X):
     ...    print("TRAIN:", train_index, "TEST:", test_index)
     ...    X_train, X_test = X[train_index], X[test_index]
@@ -531,6 +554,7 @@ class GapWalkForward(GapCrossValidator):
     TRAIN: [0 1 2 3] TEST: [6 7]
     TRAIN: [0 1 2 3 4 5] TEST: [8 9]
     TRAIN: [0 1 2 3 4 5 6 7] TEST: [10 11]
+
     Notes
     -----
     The training set has size ``i * n_samples // (n_splits + 1)
@@ -547,10 +571,29 @@ class GapWalkForward(GapCrossValidator):
         self.rollback_size = rollback_size
 
     def get_n_splits(self, X=None, y=None, groups=None):
+        """Returns the number of splitting iterations in the cross-validator
+
+        Parameters
+        ----------
+        X : object
+            Always ignored, exists for compatibility.
+
+        y : object
+            Always ignored, exists for compatibility.
+
+        groups : object
+            Always ignored, exists for compatibility.
+
+        Returns
+        -------
+        n_splits : int
+            Returns the number of splitting iterations in the cross-validator.
+        """
         return self.n_splits
 
     def split(self, X, y=None, groups=None):
         """Generate indices to split data into training and test set.
+
         Parameters
         ----------
         X : array-like, shape (n_samples, n_features)
@@ -560,10 +603,12 @@ class GapWalkForward(GapCrossValidator):
             Always ignored, exists for compatibility.
         groups : array-like, with shape (n_samples,)
             Always ignored, exists for compatibility.
+
         Yields
         ------
         train : ndarray
             The training set indices for that split.
+
         test : ndarray
             The testing set indices for that split.
         """
@@ -610,9 +655,78 @@ class GapWalkForward(GapCrossValidator):
                 yield (indices[:max(train_end, 0)],
                        indices[test_start:test_start + test_size])
 
+    def __repr__(self):
+        return _build_repr(self)
 
-class GapRollForward(GapCrossValidator):
-    def __init__(self, min_train_size=0, max_train_size=np.inf,
+
+class GapRollForward:
+    """A more flexible and thus powerful version of walk forward
+
+    Provides train/test indices to split time series data samples
+    that are observed at fixed time intervals, in train/test sets.
+    In each split, test indices must be higher than before.
+
+    Parameters
+    ----------
+    min_train_size : int, default=0
+        Minimum size for the training set. Can be 0.
+
+    max_train_size : int, default=np.inf
+        Maximum size for the training set, aka the *window*.
+
+    min_test_size : int, default=1
+        Minimum size for the test set. Will stop rolling when
+        there are not enough remaining data samples.
+
+    max_test_size : int, default=1
+        Maximum size for the test set. Set it to a small number
+        so that each split will not use up the whole sample.
+
+    gap_size : int, default=0
+        The gap between the training set and the test set.
+
+    roll_size : int, default=`max_test_size`
+        The length by which each split move forward. The default
+        value ensures that each data sample is test for at most
+        once. A smaller value allows overlapped test sets.
+        It has a similar flavor with rolling back but with the
+        opposite direction.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from tscv import GapRollForward
+    >>> X = np.array([[1, 2], [3, 4], [1, 2], [3, 4], [1, 2], [3, 4]])
+    >>> y = np.array([1, 2, 3, 4, 5, 6])
+    >>> cv = GapRollForward()
+    >>> print(cv)
+    GapRollForward(gap_size=0, max_test_size=1, max_train_size=inf,
+            min_test_size=1, min_train_size=0, roll_size=1)
+    >>> for train_index, test_index in cv.split(X):
+    ...    print("TRAIN:", train_index, "TEST:", test_index)
+    ...    X_train, X_test = X[train_index], X[test_index]
+    ...    y_train, y_test = y[train_index], y[test_index]
+    TRAIN: [] TEST: [0]
+    TRAIN: [0] TEST: [1]
+    TRAIN: [0 1] TEST: [2]
+    TRAIN: [0 1 2] TEST: [3]
+    TRAIN: [0 1 2 3] TEST: [4]
+    TRAIN: [0 1 2 3 4] TEST: [5]
+    >>> X = np.random.randn(10, 2)
+    >>> y = np.random.randn(10)
+    >>> cv = GapRollForward(min_train_size=1, max_train_size=3,
+    ...                     min_test_size=1, max_test_size=3,
+    ...                     gap_size=2, roll_size=2)
+    >>> for train_index, test_index in cv.split(X):
+    ...    print("TRAIN:", train_index, "TEST:", test_index)
+    ...    X_train, X_test = X[train_index], X[test_index]
+    ...    y_train, y_test = y[train_index], y[test_index]
+    TRAIN: [0] TEST: [3 4 5]
+    TRAIN: [0 1 2] TEST: [5 6 7]
+    TRAIN: [2 3 4] TEST: [7 8 9]
+    TRAIN: [4 5 6] TEST: [9]
+    """
+    def __init__(self, *, min_train_size=0, max_train_size=np.inf,
                  min_test_size=1, max_test_size=1,
                  gap_size=0, roll_size=None):
         self.min_train_size = min_train_size
@@ -623,6 +737,25 @@ class GapRollForward(GapCrossValidator):
         self.roll_size = max_test_size if roll_size is None else roll_size
 
     def get_n_splits(self, X=None, y=None, groups=None):
+        """Returns the number of splitting iterations in the cross-validator
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Training data, where n_samples is the number of samples
+            and n_features is the number of features.
+
+        y : object
+            Always ignored, exists for compatibility.
+
+        groups : object
+            Always ignored, exists for compatibility.
+
+        Returns
+        -------
+        n_splits : int
+            Returns the number of splitting iterations in the cross-validator.
+        """
         n_samples = _num_samples(X)
         a = self.min_train_size
         b = self.min_test_size
@@ -633,6 +766,28 @@ class GapRollForward(GapCrossValidator):
         return n_splits
 
     def split(self, X, y=None, groups=None):
+        """Generate indices to split data into training and test set.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Training data, where n_samples is the number of samples
+            and n_features is the number of features.
+
+        y : array-like, shape (n_samples,)
+            Always ignored, exists for compatibility.
+
+        groups : array-like, with shape (n_samples,)
+            Always ignored, exists for compatibility.
+
+        Yields
+        ------
+        train : ndarray
+            The training set indices for that split.
+
+        test : ndarray
+            The testing set indices for that split.
+        """
         X, y, groups = indexable(X, y, groups)
         n_splits = self.get_n_splits(X, y, groups)
         n_samples = _num_samples(X)
@@ -645,3 +800,6 @@ class GapRollForward(GapCrossValidator):
                    indices[q:min(q + self.max_test_size, n_samples)])
             p += self.roll_size
             q = p + self.gap_size
+
+    def __repr__(self):
+        return _build_repr(self)
