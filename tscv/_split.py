@@ -389,7 +389,7 @@ def gap_train_test_split(*arrays, **options):
         If float, should be between 0.0 and 1.0 and equal to
         test / (train + test). If int, represents the absolute number of
         test samples. If None, the value is set to the complement of the
-        train size and the gap. If ``train_size`` is also None,
+        train size and the gap. If `train_size` is also None,
         it will be set to 0.25.
 
     train_size : float, int, or None, default=None
@@ -416,7 +416,6 @@ def gap_train_test_split(*arrays, **options):
            [8, 9]])
     >>> list(y)
     [0, 1, 2, 3, 4]
-
     >>> X_train, X_test, y_train, y_test = gap_train_test_split(
     ...     X, y, test_size=0.33, gap_size=1)
     ...
@@ -484,10 +483,10 @@ def gap_train_test_split(*arrays, **options):
 class GapWalkForward:
     """Legacy walk forward time series cross-validator
 
-    .. warning::
+    .. deprecated:: 0.0.5
         This utility is kept for backward compatibility.
         For new code, the more flexible and thus powerful
-        ``GapRollForward`` is recommended.
+        :class:`GapRollForward` is recommended.
 
     Provides train/test indices to split time series data samples
     that are observed at fixed time intervals, in train/test sets.
@@ -557,9 +556,10 @@ class GapWalkForward:
 
     Notes
     -----
-    The training set has size ``i * n_samples // (n_splits + 1)
-    + n_samples % (n_splits + 1)`` in the ``i``th split,
-    with a test set of size ``n_samples//(n_splits + 1)`` by default,
+    The training set has size
+    ``i * n_samples // (n_splits + 1) + n_samples % (n_splits + 1)``
+    in the ``i``-th split, with a test set of size
+    ``n_samples // (n_splits + 1)`` by default,
     where ``n_samples`` is the number of samples.
     """
     def __init__(self, n_splits=5, max_train_size=None, test_size=None,
@@ -661,6 +661,8 @@ class GapWalkForward:
 
 class GapRollForward:
     """A more flexible and thus powerful version of walk forward
+
+    .. versionadded:: 0.1
 
     Provides train/test indices to split time series data samples
     that are observed at fixed time intervals, in train/test sets.

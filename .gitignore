@@ -6,6 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
+# scikit-learn specific
+doc/_build/
+doc/auto_examples/
+doc/modules/generated/
+doc/datasets/generated/
+
 # Distribution / packaging
 .Python
 build/
@@ -64,7 +70,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+doc/_build/
+doc/generated/
 
 # PyBuilder
 target/
@@ -102,3 +109,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Mac OS
+*.DS_Store
