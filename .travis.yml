@@ -1,0 +1,37 @@
+sudo: false
+
+language: python
+
+cache:
+  directories:
+  - $HOME/.cache/pip
+
+matrix:
+  include:
+    - env: PYTHON_VERSION="3.6" SKLEARN_VERSION="0.24"
+    - env: PYTHON_VERSION="3.7" SKLEARN_VERSION="*"
+    - env: PYTHON_VERSION="3.8" SKLEARN_VERSION="*"
+    - env: PYTHON_VERSION="3.9" SKLEARN_VERSION="*"
+
+install:
+  # install miniconda
+  - deactivate
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+  - MINICONDA_PATH=/home/travis/miniconda
+  - chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH
+  - export PATH=$MINICONDA_PATH/bin:$PATH
+  - conda update --yes conda
+  # create the testing environment
+  - conda create -n testenv --yes python=$PYTHON_VERSION pip
+  - source activate testenv
+  - conda install --yes -c conda-forge scikit-learn==$SKLEARN_VERSION
+  - pip install codecov cython nose pytest pytest-cov
+  - pip install .
+
+script:
+  - mkdir for_test
+  - cd for_test
+  - pytest -v --cov=tscv --pyargs tscv
+
+after_success:
+  - codecov
