@@ -47,7 +47,7 @@ extensions = [
 
 # this is needed for some reason...
 # see https://github.com/numpy/numpydoc/issues/69
-#numpydoc_show_class_members = False
+numpydoc_show_class_members = False
 
 # For maths, use mathjax by default and svg if NO_MATHJAX env variable is set
 # (useful for viewing the doc offline)
