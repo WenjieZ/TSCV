@@ -30,7 +30,7 @@ script:
   - pytest -v doc/*rst
   - mkdir for_test
   - cd for_test
-  - pytest -v --cov=skltemplate --pyargs skltemplate
+  - pytest -v --cov=tscv --pyargs tscv
 
 after_success:
   - codecov
