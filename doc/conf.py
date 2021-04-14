@@ -40,7 +40,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
 #    'sphinx.ext.imgconverter',
-    'napoleon',
+    'numpydoc',
 #    'sphinx_rtd_theme',
 #    'sphinx_gallery.gen_gallery',
 ]
