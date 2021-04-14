@@ -15,7 +15,7 @@
 import sys
 import os
 
-import sphinx_gallery
+# import sphinx_gallery
 import sphinx_rtd_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -76,7 +76,7 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # Generate the plots for the gallery
-plot_gallery = True
+#plot_gallery = True
 
 # The master toctree document.
 master_doc = 'index'
@@ -314,12 +314,12 @@ intersphinx_mapping = {
 }
 
 # sphinx-gallery configuration
-sphinx_gallery_conf = {
-    'doc_module': 'tscv',
-    'backreferences_dir': os.path.join('generated'),
-    'reference_url': {
-        'tscv': None}
-}
+#sphinx_gallery_conf = {
+#    'doc_module': 'tscv',
+#    'backreferences_dir': os.path.join('generated'),
+#    'reference_url': {
+#        'tscv': None}
+#}
 
 def setup(app):
     # a copy button to copy snippet of code from the documentation
