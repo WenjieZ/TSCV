@@ -21,13 +21,12 @@ install:
   - conda update --yes conda
   # create the testing environment
   - conda create -n testenv --yes python=$PYTHON_VERSION pip
-  - source activate testenv
+  - conda activate testenv
   - conda install --yes -c conda-forge scikit-learn==$SKLEARN_VERSION
   - pip install codecov cython nose pytest pytest-cov
   - pip install .
 
 script:
-  - pytest -v doc/*rst
   - mkdir for_test
   - cd for_test
   - pytest -v --cov=tscv --pyargs tscv
