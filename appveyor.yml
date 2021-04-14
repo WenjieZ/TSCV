@@ -1,0 +1,49 @@
+build: false
+
+environment:
+  matrix:
+
+    # For Python versions available on Appveyor, see
+    # https://www.appveyor.com/docs/windows-images-software/#python
+    # The list here is complete (excluding Python 2.6, which
+    # isn't covered by this document) at the time of writing.
+    
+    - PYTHON: "C:\\Miniconda3-x64"
+      PYTHON_VERSION: "3.6.x"
+      PYTHON_ARCH: "64"
+      SKLEARN_VERSION: "0.24"
+
+    - PYTHON: "C:\\Miniconda3-x64"
+      PYTHON_VERSION: "3.7.x"
+      PYTHON_ARCH: "64"
+      SKLEARN_VERSION: "*"
+
+    - PYTHON: "C:\\Miniconda3-x64"
+      PYTHON_VERSION: "3.8.x"
+      PYTHON_ARCH: "64"
+      SKLEARN_VERSION: "*"
+
+    - PYTHON: "C:\\Miniconda3-x64"
+      PYTHON_VERSION: "3.9.x"
+      PYTHON_ARCH: "64"
+      SKLEARN_VERSION: "*"
+
+install:
+  # Prepend miniconda installed Python to the PATH of this build
+  # Add Library/bin directory to fix issue
+  # https://github.com/conda/conda/issues/1753
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PYTHON%\\Library\\bin;%PATH%"
+  # install the dependencies
+  - "conda install --yes -c conda-forge pip scikit-learn==%SKLEARN_VERSION%"
+  - pip install codecov nose pytest pytest-cov
+  - pip install .
+
+test_script:
+  - mkdir for_test
+  - cd for_test
+  - pytest -v --cov=tscv --pyargs tscv
+
+after_test:
+  - cp .coverage %APPVEYOR_BUILD_FOLDER%
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - codecov
