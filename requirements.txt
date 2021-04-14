@@ -1,1 +1,1 @@
-sklearn
+sklearn>=0.24
