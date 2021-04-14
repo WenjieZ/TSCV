@@ -146,14 +146,14 @@ class GapCrossValidator(metaclass=ABCMeta):
     @staticmethod
     def __indices_to_masks(indices, n_samples):
         for index in indices:
-            mask = np.zeros(n_samples, dtype=np.bool)
+            mask = np.zeros(n_samples, dtype=np.bool_)
             mask[index] = True
             yield mask
 
     def __complement_masks(self, masks):
         before, after = self.gap_before, self.gap_after
         for mask in masks:
-            complement = np.ones(len(mask), dtype=np.bool)
+            complement = np.ones(len(mask), dtype=np.bool_)
             for i, masked in enumerate(mask):
                 if masked:   # then make its neighbourhood False
                     begin = max(i - before, 0)
@@ -339,7 +339,7 @@ class GapKFold(GapCrossValidator):
                 .format(self.n_splits, n_samples))
 
         indices = np.arange(n_samples)
-        fold_sizes = np.full(n_splits, n_samples // n_splits, dtype=np.int)
+        fold_sizes = np.full(n_splits, n_samples // n_splits, dtype=np.int_)
         fold_sizes[:n_samples % n_splits] += 1
         current = 0
         for fold_size in fold_sizes:
