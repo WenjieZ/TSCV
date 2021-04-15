@@ -8,8 +8,8 @@ cache:
 
 matrix:
   include:
-    - env: PYTHON_VERSION="3.6" SKLEARN_VERSION="0.24"
-    - env: PYTHON_VERSION="3.9" SKLEARN_VERSION="*"
+    - env: PYTHON_VERSION="3.6" SKLEARN_VERSION="0.22"
+    - env: PYTHON_VERSION="3.9" SKLEARN_VERSION="0.24"
 
 install:
   # install miniconda
