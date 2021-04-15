@@ -1,11 +1,11 @@
 """Test the split module"""
-import warnings
+# import warnings
 import pytest
 import numpy as np
 
 from numpy.testing import assert_equal
-from numpy.testing import assert_allclose
-from numpy.testing import assert_array_almost_equal
+# from numpy.testing import assert_allclose
+# from numpy.testing import assert_array_almost_equal
 from numpy.testing import assert_array_equal
 from sklearn.utils._testing import ignore_warnings
 
@@ -360,7 +360,7 @@ def test_walk_forward_test_size():
 
     # Test with max_train_size
     splits = GapWalkForward(n_splits=2, test_size=2,
-                             max_train_size=4).split(X)
+                            max_train_size=4).split(X)
 
     train, test = next(splits)
     assert_array_equal(train, [2, 3, 4, 5])
@@ -407,7 +407,7 @@ def test_walk_forward_gap():
 
     # Test with test_size
     splits = GapWalkForward(n_splits=2, gap_size=2,
-                             max_train_size=4, test_size=2).split(X)
+                            max_train_size=4, test_size=2).split(X)
 
     train, test = next(splits)
     assert_array_equal(train, [0, 1, 2, 3])
