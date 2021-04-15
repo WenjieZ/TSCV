@@ -16,7 +16,7 @@ pip install tscv
 This extension defines 3 cross-validator classes and 1 function:
 - `GapLeavePOut`
 - `GapKFold`
-- `GapWalkForward`
+- `GapRollForward`
 - `gap_train_test_split`
 
 The three classes can all be passed, as the `cv` argument, to
@@ -56,9 +56,12 @@ X_train, X_test, y_train, y_test = gap_train_test_split(X, y, test_size=2, gap_s
 - Report bugs in the issue tracker
 - Express your use cases in the issue tracker
 
+## Support
+- [tscv.readthedocs.io](tscv.readthedocs.io)
+
 ## Acknowledgments
 
-- I would like to thank Jeffrey Racine, Christoph Bergmeir, and Prabir Burman for the helpful discussion.
+- I would like to thank Jeffrey Racine and Christoph Bergmeir for the helpful discussion.
 
 ## License
 BSD-3-Clause
