@@ -11,12 +11,12 @@ environment:
     - PYTHON: "C:\\Miniconda3-x64"
       PYTHON_VERSION: "3.6.x"
       PYTHON_ARCH: "64"
-      SKLEARN_VERSION: "0.24"
+      SKLEARN_VERSION: "0.22"
 
     - PYTHON: "C:\\Miniconda3-x64"
       PYTHON_VERSION: "3.9.x"
       PYTHON_ARCH: "64"
-      SKLEARN_VERSION: "*"
+      SKLEARN_VERSION: "0.24"
 
 install:
   # Prepend miniconda installed Python to the PATH of this build
