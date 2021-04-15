@@ -8,7 +8,7 @@ to split time series based on a preset strategy.
 
 import warnings
 import numbers
-from math import ceil, floor, modf
+from math import modf
 from abc import ABCMeta, abstractmethod
 from itertools import chain
 from inspect import signature
@@ -522,8 +522,8 @@ class GapWalkForward:
     >>> y = np.array([1, 2, 3, 4, 5, 6])
     >>> cv = GapWalkForward(n_splits=5)
     >>> print(cv)
-    GapWalkForward(gap_size=0, max_train_size=None, n_splits=5, rollback_size=0,
-            test_size=None)
+    GapWalkForward(gap_size=0, max_train_size=None, n_splits=5,
+                   rollback_size=0, test_size=None)
     >>> for train_index, test_index in cv.split(X):
     ...    print("TRAIN:", train_index, "TEST:", test_index)
     ...    X_train, X_test = X[train_index], X[test_index]
@@ -791,7 +791,7 @@ class GapRollForward:
             The testing set indices for that split.
         """
         X, y, groups = indexable(X, y, groups)
-        n_splits = self.get_n_splits(X, y, groups)
+        self.get_n_splits(X, y, groups)  # call for the check
         n_samples = _num_samples(X)
         indices = np.arange(n_samples)
 
