@@ -1,3 +1,7 @@
+[![Downloads](https://pepy.tech/badge/tscv/month)](https://pepy.tech/project/tscv)
+[![Build Status](https://travis-ci.com/WenjieZ/TSCV.svg?branch=master)](https://travis-ci.com/WenjieZ/TSCV)
+[![codecov](https://codecov.io/gh/WenjieZ/TSCV/branch/master/graph/badge.svg?token=dcGlEfHCw2)](https://codecov.io/gh/WenjieZ/TSCV)
+
 ![](train-gap-test.svg)
 
 # TSCV: Time Series Cross-Validation
