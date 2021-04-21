@@ -1,6 +1,7 @@
 [![Downloads](https://pepy.tech/badge/tscv/month)](https://pepy.tech/project/tscv)
 [![Build Status](https://travis-ci.com/WenjieZ/TSCV.svg?branch=master)](https://travis-ci.com/WenjieZ/TSCV)
 [![codecov](https://codecov.io/gh/WenjieZ/TSCV/branch/master/graph/badge.svg?token=dcGlEfHCw2)](https://codecov.io/gh/WenjieZ/TSCV)
+[![DOI](https://zenodo.org/badge/186586661.svg)](https://zenodo.org/badge/latestdoi/186586661)
 
 ![](train-gap-test.svg)
 
@@ -13,6 +14,12 @@ It introduces **gaps** between the training set and the test set, which mitigate
 
 ```bash
 pip install tscv
+```
+
+or
+
+```bash
+conda install -c conda-forge tscv
 ```
 
 ## Usage
