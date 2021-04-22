@@ -68,7 +68,7 @@ X_train, X_test, y_train, y_test = gap_train_test_split(X, y, test_size=2, gap_s
 - Express your use cases in the issue tracker
 
 ## Support
-- [tscv.readthedocs.io](tscv.readthedocs.io)
+- [tscv.readthedocs.io](https://tscv.readthedocs.io)
 
 ## Acknowledgments
 
