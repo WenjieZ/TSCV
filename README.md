@@ -67,7 +67,7 @@ X_train, X_test, y_train, y_test = gap_train_test_split(X, y, test_size=2, gap_s
 - Report bugs in the issue tracker
 - Express your use cases in the issue tracker
 
-## Support
+## Documentations
 - [tscv.readthedocs.io](https://tscv.readthedocs.io)
 
 ## Acknowledgments
@@ -78,11 +78,17 @@ X_train, X_test, y_train, y_test = gap_train_test_split(X, y, test_size=2, gap_s
 BSD-3-Clause
 
 ## Citation
+
+Wenjie Zheng. (2021). Time Series Cross-Validation (TSCV): an extension for scikit-learn. Zenodo. http://doi.org/10.5281/zenodo.4707309
+
 ```latex
-@article{zheng2019hv,
-  title={$ hv $-Block Cross Validation is not a BIBD: a Note on the Paper by Jeff Racine (2000)},
+@software{zheng_2021_4707309,
+  title={{Time Series Cross-Validation (TSCV): an extension for scikit-learn}},
   author={Zheng, Wenjie},
-  journal={arXiv preprint arXiv:1910.08904},
-  year={2019}
+  month={april},
+  year={2021},
+  publisher={Zenodo},
+  doi={10.5281/zenodo.4707309},
+  url={http://doi.org/10.5281/zenodo.4707309}
 }
 ```
