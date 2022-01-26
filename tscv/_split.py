@@ -161,27 +161,18 @@ class GapCrossValidator(metaclass=ABCMeta):
                     complement[np.arange(begin, end)] = False
             yield complement
 
-    def __insert_seq_after(self, arr, n):
-        max_value = np.max(arr)
-        return np.append(arr, np.arange(max_value, max_value+n+1))
-
-    def __insert_seq_before(self, arr, n):
-        min_value = np.min(arr)
-        return np.insert(arr, 0, np.arange(min_value-n, min_value))
-
     def __complement_indices(self, indices, n_samples):
         before, after = self.gap_before, self.gap_after
+        allindices = np.arange(n_samples)
         for index in indices:
-            complement = np.setdiff1d(
-                np.arange(n_samples), 
-                self.__insert_seq_before(
-                    self.__insert_seq_after(
-                        index, 
-                        after
-                    ), 
-                    before
-                )
-            )
+            # split index in subarrays of contiguous elements
+            subindexes = np.split(index, np.where(np.diff(index) != 1)[0]+1)
+            complement = allindices
+            # find complement in an efficient way on arrays of contiguous elements
+            for subindex in subindexes:
+                begin = max(0, subindex[0] - before)
+                end = min(subindex[-1]+after+1, n_samples)
+                complement = np.intersect1d(complement, np.setdiff1d(allindices, allindices[begin:end]))
             yield complement
 
     @abstractmethod
