@@ -24,6 +24,7 @@ __all__ = ['GapCrossValidator',
            'GapLeavePOut',
            'GapKFold',
            'GapWalkForward',
+           'CombinatorialGapKFold',
            'gap_train_test_split']
 
 
@@ -422,8 +423,8 @@ class CombinatorialGapKFold(GapCrossValidator):
         N = int(N)
 
         if not isinstance(k, numbers.Integral):
-            raise ValueError('The number of test splits must be of Integral type. '
-                             '%s of type %s was passed.'
+            raise ValueError('The number of test splits must be of Integral '
+                             'type. %s of type %s was passed.'
                              % (k, type(k)))
         k = int(k)
 
@@ -453,16 +454,20 @@ class CombinatorialGapKFold(GapCrossValidator):
                  " than the number of samples: n_samples={1}.")
                 .format(self.n_groups, n_samples))
         self.indexes = np.arange(n_samples)
-        splits = [(split[0], split[-1]+1) for split in np.array_split(self.indexes, self.n_groups)]
+        splits = [(split[0], split[-1]+1) 
+                  for split 
+                  in np.array_split(self.indexes, self.n_groups)]
         splits_combinations = list(combinations(splits, self.test_splits))
         for splits_combination in splits_combinations:
             test_indexes = np.empty(0)
             train_indexes = self.indexes
             for start, stop in splits_combination:
-                test_indexes = np.union1d(test_indexes, self.indexes[start:stop]).astype(int)
+                test_indexes = np.union1d(
+                    test_indexes, self.indexes[start:stop]).astype(int)
                 begin = max(0, start-gap_before)
                 end = min(n_samples, stop+gap_after)
-                train_indexes = np.intersect1d(train_indexes, np.setdiff1d(self.indexes, self.indexes[begin:end]))
+                train_indexes = np.intersect1d(train_indexes, 
+                    np.setdiff1d(self.indexes, self.indexes[begin:end]))
                 if len(train_indexes) <= 0:
                     raise ValueError("Not enough training samples available")
             yield train_indexes, test_indexes
