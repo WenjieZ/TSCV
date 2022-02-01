@@ -166,13 +166,14 @@ class GapCrossValidator(metaclass=ABCMeta):
         allindices = np.arange(n_samples)
         for index in indices:
             # split index in subarrays of contiguous elements
-            subindexes = np.split(index, np.where(np.diff(index) != 1)[0]+1)
+            subindexes = np.split(index, np.where(np.diff(index) != 1)[0] + 1)
             complement = allindices
-            # find complement in an efficient way on arrays of contiguous elements
+            # find complement on arrays of contiguous elements
             for subindex in subindexes:
                 begin = max(0, subindex[0] - before)
-                end = min(subindex[-1]+after+1, n_samples)
-                complement = np.intersect1d(complement, np.setdiff1d(allindices, allindices[begin:end]))
+                end = min(subindex[-1] + after + 1, n_samples)
+                complement = np.intersect1d(complement, 
+                    np.setdiff1d(allindices, allindices[begin:end]))
             yield complement
 
     @abstractmethod
