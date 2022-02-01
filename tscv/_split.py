@@ -172,7 +172,7 @@ class GapCrossValidator(metaclass=ABCMeta):
             for subindex in subindexes:
                 begin = max(0, subindex[0] - before)
                 end = min(subindex[-1] + after + 1, n_samples)
-                complement = np.intersect1d(complement, 
+                complement = np.intersect1d(complement,
                     np.setdiff1d(allindices, allindices[begin:end]))
             yield complement
 
