@@ -24,15 +24,16 @@ conda install -c conda-forge tscv
 
 ## Usage
 
-This extension defines 3 cross-validator classes and 1 function:
+This extension defines 4 cross-validator classes and 1 function:
 - `GapLeavePOut`
 - `GapKFold`
 - `GapRollForward`
+- `CombinatorialGapKFold`
 - `gap_train_test_split`
 
-The three classes can all be passed, as the `cv` argument, to
+The four classes can all be passed, as the `cv` argument, to
 scikit-learn functions such as `cross-validate`, `cross_val_score`,
-and `cross_val_predict`, just like the native cross-validator classes.
+and `cross_val_predict` (except `CombinatorialGapKFold`), just like the native cross-validator classes.
 
 The one function is an alternative to the `train_test_split` function in `scikit-learn`.
 
