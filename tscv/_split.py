@@ -10,7 +10,7 @@ import warnings
 import numbers
 from math import modf
 from abc import ABCMeta, abstractmethod
-from itertools import chain
+from itertools import chain, combinations
 from inspect import signature
 
 import numpy as np
@@ -369,6 +369,124 @@ class GapKFold(GapCrossValidator):
             Returns the number of splitting iterations in the cross-validator.
         """
         return self.n_splits
+
+
+class CombinatorialGapKFold(GapCrossValidator):
+    """Combinatorial K-Folds cross-validator with Gaps
+
+    Provides train/test indices to split data in train/test sets. Split
+    dataset into N groups of k folds (without shuffling).
+
+    Parameters
+    ----------
+    N : int, default=5
+        Number of groups. Must be at least 2.
+
+    k : int, default=2
+        Number of test splints. Must be at least 2.
+
+    gap_before : int, default=2
+        Gap before the test sets.
+
+    gap_after : int, default=0
+        Gap after the test sets.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from tscv import CombinatorialGapKFold
+    >>> cgkf = CombinatorialGapKFold(N=5, k=2, gap_before=1, gap_after=1)
+    >>> cgkf.get_n_splits(np.arange(10))
+    10
+    >>> print(cgkf)
+    CombinatorialGapKFold(N=None, gap_after=1, gap_before=1, k=None)
+    >>> for train_index, test_index in cgkf.split(np.arange(10)):
+    ...    print("TRAIN:", train_index, "TEST:", test_index)
+    TRAIN: [5 6 7 8 9] TEST: [0 1 2 3]
+    TRAIN: [7 8 9] TEST: [0 1 4 5]
+    TRAIN: [3 4 9] TEST: [0 1 6 7]
+    TRAIN: [3 4 5 6] TEST: [0 1 8 9]
+    TRAIN: [0 7 8 9] TEST: [2 3 4 5]
+    TRAIN: [0 9] TEST: [2 3 6 7]
+    TRAIN: [0 5 6] TEST: [2 3 8 9]
+    TRAIN: [0 1 2 9] TEST: [4 5 6 7]
+    TRAIN: [0 1 2] TEST: [4 5 8 9]
+    TRAIN: [0 1 2 3 4] TEST: [6 7 8 9]
+    """
+
+    def __init__(self, N=5, k=2, gap_before=0, gap_after=0):
+        if not isinstance(N, numbers.Integral):
+            raise ValueError('The number of groups must be of Integral type. '
+                             '%s of type %s was passed.'
+                             % (N, type(N)))
+        N = int(N)
+
+        if not isinstance(k, numbers.Integral):
+            raise ValueError('The number of test splits must be of Integral type. '
+                             '%s of type %s was passed.'
+                             % (k, type(k)))
+        k = int(k)
+
+        if N <= 1:
+            raise ValueError(
+                "Combinatorial k-fold cross-validation requires at least two"
+                " groups by setting N=2 or more,"
+                " got N={0}.".format(N))
+
+        if k < 1:
+            raise ValueError(
+                "Combinatorial k-fold cross-validation requires at least one"
+                " test split by setting k=1 or more,"
+                " got k={0}.".format(k))
+
+        super().__init__(gap_before, gap_after)
+        self.n_groups = N
+        self.test_splits = k
+
+    def split(self, X, y=None, groups=None):
+        n_samples = _num_samples(X)
+        n_splits = self.n_groups
+        gap_before, gap_after = self.gap_before, self.gap_after
+        if n_splits > n_samples:
+            raise ValueError(
+                ("Cannot have number of splits n_splits={0} greater"
+                 " than the number of samples: n_samples={1}.")
+                .format(self.n_groups, n_samples))
+        self.indexes = np.arange(n_samples)
+        splits = [(split[0], split[-1]+1) for split in np.array_split(self.indexes, self.n_groups)]
+        splits_combinations = list(combinations(splits, self.test_splits))
+        for splits_combination in splits_combinations:
+            test_indexes = np.empty(0)
+            train_indexes = self.indexes
+            for start, stop in splits_combination:
+                test_indexes = np.union1d(test_indexes, self.indexes[start:stop]).astype(int)
+                begin = max(0, start-gap_before)
+                end = min(n_samples, stop+gap_after)
+                train_indexes = np.intersect1d(train_indexes, np.setdiff1d(self.indexes, self.indexes[begin:end]))
+                if len(train_indexes) <= 0:
+                    raise ValueError("Not enough training samples available")
+            yield train_indexes, test_indexes
+
+    def get_n_splits(self, X=None, y=None, groups=None):
+        """Returns the number of splitting iterations in the cross-validator
+
+        Parameters
+        ----------
+        X : object
+            Always ignored, exists for compatibility.
+
+        y : object
+            Always ignored, exists for compatibility.
+
+        groups : object
+            Always ignored, exists for compatibility.
+
+        Returns
+        -------
+        n_splits : int
+            Returns the number of splitting iterations in the cross-validator.
+        """
+        return len(list(combinations(range(self.n_groups), self.test_splits)))
 
 
 def gap_train_test_split(*arrays, **options):
