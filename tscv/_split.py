@@ -454,8 +454,8 @@ class CombinatorialGapKFold(GapCrossValidator):
                  " than the number of samples: n_samples={1}.")
                 .format(self.n_groups, n_samples))
         self.indexes = np.arange(n_samples)
-        splits = [(split[0], split[-1]+1) 
-                  for split 
+        splits = [(split[0], split[-1] + 1)
+                  for split
                   in np.array_split(self.indexes, self.n_groups)]
         splits_combinations = list(combinations(splits, self.test_splits))
         for splits_combination in splits_combinations:
@@ -464,9 +464,9 @@ class CombinatorialGapKFold(GapCrossValidator):
             for start, stop in splits_combination:
                 test_indexes = np.union1d(
                     test_indexes, self.indexes[start:stop]).astype(int)
-                begin = max(0, start-gap_before)
-                end = min(n_samples, stop+gap_after)
-                train_indexes = np.intersect1d(train_indexes, 
+                begin = max(0, start - gap_before)
+                end = min(n_samples, stop + gap_after)
+                train_indexes = np.intersect1d(train_indexes,
                     np.setdiff1d(self.indexes, self.indexes[begin:end]))
                 if len(train_indexes) <= 0:
                     raise ValueError("Not enough training samples available")
