@@ -69,6 +69,14 @@ class GapCrossValidator(metaclass=ABCMeta):
     Implementations must define one of the following 4 methods:
     `_iter_train_indices`, `_iter_train_masks`,
     `_iter_test_indices`, `_iter_test_masks`.
+
+    Parameters
+    ----------
+    gap_before : int, default=0
+        Gap before the test sets.
+
+    gap_after : int, default=0
+        Gap after the test sets.
     """
 
     def __init__(self, gap_before=0, gap_after=0):
@@ -106,6 +114,8 @@ class GapCrossValidator(metaclass=ABCMeta):
 
     # Since subclasses implement any of the following 4 methods,
     # none can be abstract.
+    # _iter_train_indices <- _iter_test_indices <-
+    # _iter_test_masks <- _iter_train_masks <- _iter_train_indices
     def _iter_train_indices(self, X=None, y=None, groups=None):
         """Generates integer indices corresponding to training sets.
 
@@ -151,7 +161,8 @@ class GapCrossValidator(metaclass=ABCMeta):
             yield mask
 
     def __complement_masks(self, masks):
-        before, after = self.gap_before, self.gap_after
+        # switch gap_before and gap_after because of different viewpoints
+        before, after = self.gap_after, self.gap_before
         for mask in masks:
             complement = np.ones(len(mask), dtype=np.bool_)
             for i, masked in enumerate(mask):

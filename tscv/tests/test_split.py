@@ -61,8 +61,8 @@ def test_gap_cross_validator():
     masks = cv._GapCrossValidator__complement_masks(
         [[False,  True,  True,  True, False, False],
          [False, False, False, False, False,  True]])
-    assert_array_equal(next(masks), [True, False, False, False, False, False])
-    assert_array_equal(next(masks), [True, True, True, True, True, False])
+    assert_array_equal(next(masks), [False, False, False, False, True, True])
+    assert_array_equal(next(masks), [True, True, True, False, False, False])
 
     indices = cv._GapCrossValidator__complement_indices([[1, 2, 3], [5]], 7)
     assert_array_equal(next(indices), [0, 6])
@@ -73,12 +73,12 @@ def test_gap_cross_validator():
     assert_array_equal(next(masks), [False, False, True, False, True])
 
     masks = cv._iter_test_masks("abcde")
-    assert_array_equal(next(masks), [True, False, False, False, False])
-    assert_array_equal(next(masks), [True, True, False, False, False])
+    assert_array_equal(next(masks), [False, False, False, False, True])
+    assert_array_equal(next(masks), [False, False, False, False, False])
 
     indices = cv._iter_test_indices("abcde")
-    assert_array_equal(next(indices), [0])
-    assert_array_equal(next(indices), [0, 1])
+    assert_array_equal(next(indices), [4])
+    assert_array_equal(next(indices), [])
 
     # Another dummy subclass
     class test2CV(GapCrossValidator):
