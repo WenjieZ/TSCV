@@ -25,7 +25,7 @@ install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PYTHON%\\Library\\bin;%PATH%"
   # install the dependencies
   - "conda install --yes -c conda-forge pip scikit-learn==%SKLEARN_VERSION%"
-  - pip install codecov nose pytest pytest-cov
+  - pip install codecov cython nose pytest pytest-cov
   - pip install .
 
 test_script:
