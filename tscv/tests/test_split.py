@@ -672,3 +672,35 @@ def test_combinatorial_gap_k_fold():
         match="Not enough training samples available"
     ):
         next(splits)
+
+    with pytest.raises(
+        ValueError,
+        match="The number of groups must be of Integral type. 5.0 of type <class 'float'> was passed."
+    ):
+        CombinatorialGapKFold(N=5.0, k=2)
+
+    with pytest.raises(
+        ValueError,
+        match="The number of test splits must be of Integral type. 2 of type <class 'str'> was passed."
+    ):
+        CombinatorialGapKFold(N=5, k="2")
+
+    with pytest.raises(
+        ValueError,
+        match="Combinatorial k-fold cross-validation requires at least two groups by setting N=2 or more, got N=1."
+    ):
+        CombinatorialGapKFold(N=1, k=2)
+
+    with pytest.raises(
+        ValueError,
+        match="Combinatorial k-fold cross-validation requires at least one test split by setting k=1 or more, got k=0."
+    ):
+        CombinatorialGapKFold(N=5, k=0)
+
+    splits = CombinatorialGapKFold(N=15, k=2).split(np.arange(10))
+
+    with pytest.raises(
+        ValueError,
+        match="Cannot have number of splits n_splits=15 greater than the number of samples: n_samples=10."
+    ):
+        next(splits)
