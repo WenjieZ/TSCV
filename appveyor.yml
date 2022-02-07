@@ -24,7 +24,7 @@ install:
   # https://github.com/conda/conda/issues/1753
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PYTHON%\\Library\\bin;%PATH%"
   # install the dependencies
-  - "conda install --yes -c conda-forge pip scikit-learn==%SKLEARN_VERSION% pytest=6.2.5"
+  - "conda install --yes -c conda-forge pip scikit-learn==%SKLEARN_VERSION% pytest"
   - pip install codecov nose pytest-cov
   - pip install .
 
@@ -33,7 +33,7 @@ test_script:
   - cd for_test
   - pytest -v --cov=tscv --pyargs tscv
 
-#after_test:
-#  - cp .coverage %APPVEYOR_BUILD_FOLDER%
-#  - cd %APPVEYOR_BUILD_FOLDER%
-#  - codecov
+after_test:
+  - cp .coverage %APPVEYOR_BUILD_FOLDER%
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - codecov
