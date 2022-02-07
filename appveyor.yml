@@ -31,7 +31,8 @@ install:
 test_script:
 #  - mkdir for_test
 #  - cd for_test
-  - pytest -v --cov=tscv --pyargs tscv
+#  - pytest -v --cov=tscv --pyargs tscv
+   - pytest -v
 
 after_test:
   - cp .coverage %APPVEYOR_BUILD_FOLDER%
