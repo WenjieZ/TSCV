@@ -13,10 +13,10 @@ environment:
       PYTHON_ARCH: "64"
       SKLEARN_VERSION: "0.22"
 
-    - PYTHON: "C:\\Miniconda3-x64"
-      PYTHON_VERSION: "3.9.x"
-      PYTHON_ARCH: "64"
-      SKLEARN_VERSION: "0.24"
+#    - PYTHON: "C:\\Miniconda3-x64"
+#      PYTHON_VERSION: "3.9.x"
+#      PYTHON_ARCH: "64"
+#      SKLEARN_VERSION: "0.24"
 
 install:
   # Prepend miniconda installed Python to the PATH of this build
@@ -31,8 +31,7 @@ install:
 test_script:
 #  - mkdir for_test
 #  - cd for_test
-#  - pytest -v --cov=tscv --pyargs tscv
-   - pytest -v
+  - pytest -v --cov=tscv --pyargs tscv
 
 #after_test:
 #  - cp .coverage %APPVEYOR_BUILD_FOLDER%
