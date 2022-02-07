@@ -15,6 +15,7 @@ from tscv import GapLeavePOut
 from tscv import GapKFold
 from tscv import GapWalkForward
 from tscv import GapRollForward
+from tscv import CombinatorialGapKFold
 from tscv import gap_train_test_split
 
 
@@ -568,3 +569,106 @@ class TestGapRollForward:
         train, test = next(splits)
         assert_array_equal(train, [0, 1, 2, 3])
         assert_array_equal(test, [6])
+
+
+def test_combinatorial_gap_k_fold():
+    splits = CombinatorialGapKFold().split(np.arange(10))
+
+    train, test = next(splits)
+    assert_array_equal(train, [4, 5, 6, 7, 8, 9])
+    assert_array_equal(test, [0, 1, 2, 3])
+
+    train, test = next(splits)
+    assert_array_equal(train, [2, 3, 6, 7, 8, 9])
+    assert_array_equal(test, [0, 1, 4, 5])
+
+    train, test = next(splits)
+    assert_array_equal(train, [2, 3, 4, 5, 8, 9])
+    assert_array_equal(test, [0, 1, 6, 7])
+
+    train, test = next(splits)
+    assert_array_equal(train, [2, 3, 4, 5, 6, 7])
+    assert_array_equal(test, [0, 1, 8, 9])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 1, 6, 7, 8, 9])
+    assert_array_equal(test, [2, 3, 4, 5])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 1, 4, 5, 8, 9])
+    assert_array_equal(test, [2, 3, 6, 7])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 1, 4, 5, 6, 7])
+    assert_array_equal(test, [2, 3, 8, 9])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 1, 2, 3, 8, 9])
+    assert_array_equal(test, [4, 5, 6, 7])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 1, 2, 3, 6, 7])
+    assert_array_equal(test, [4, 5, 8, 9])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 1, 2, 3, 4, 5])
+    assert_array_equal(test, [6, 7, 8, 9])
+
+    splits = CombinatorialGapKFold(
+        N=5, k=2, gap_before=1, gap_after=2).split(np.arange(10))
+
+    train, test = next(splits)
+    assert_array_equal(train, [6, 7, 8, 9])
+    assert_array_equal(test, [0, 1, 2, 3])
+
+    train, test = next(splits)
+    assert_array_equal(train, [8, 9])
+    assert_array_equal(test, [0, 1, 4, 5])
+
+    train, test = next(splits)
+    assert_array_equal(train, [4])
+    assert_array_equal(test, [0, 1, 6, 7])
+
+    train, test = next(splits)
+    assert_array_equal(train, [4, 5, 6])
+    assert_array_equal(test, [0, 1, 8, 9])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 8, 9])
+    assert_array_equal(test, [2, 3, 4, 5])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0])
+    assert_array_equal(test, [2, 3, 6, 7])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 6])
+    assert_array_equal(test, [2, 3, 8, 9])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 1, 2])
+    assert_array_equal(test, [4, 5, 6, 7])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 1, 2])
+    assert_array_equal(test, [4, 5, 8, 9])
+
+    train, test = next(splits)
+    assert_array_equal(train, [0, 1, 2, 3, 4])
+    assert_array_equal(test, [6, 7, 8, 9])
+
+    assert_equal(CombinatorialGapKFold(
+        N=10, k=3).get_n_splits(np.arange(100)), 120)
+
+    splits = CombinatorialGapKFold(
+        N=5, k=3, gap_before=1, gap_after=2).split(np.arange(10))
+
+    train, test = next(splits)
+    assert_array_equal(train, [8, 9])
+    assert_array_equal(test, [0, 1, 2, 3, 4, 5])
+
+    with pytest.raises(
+        ValueError,
+        match="Not enough training samples available"
+    ):
+        next(splits)
