@@ -384,9 +384,9 @@ class CombinatorialGapKFold(GapCrossValidator):
         Number of groups. Must be at least 2.
 
     k : int, default=2
-        Number of test splints. Must be at least 2.
+        Number of test splits. Must be at least 1.
 
-    gap_before : int, default=2
+    gap_before : int, default=0
         Gap before the test sets.
 
     gap_after : int, default=0
