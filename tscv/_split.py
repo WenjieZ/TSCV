@@ -445,7 +445,7 @@ class CombinatorialGapKFold(GapCrossValidator):
         self.n_groups = N
         self.test_splits = k
 
-    def split(self, X, y=None, groups=None):
+    def _iter_test_indices(self, X, y=None, groups=None):
         n_samples = _num_samples(X)
         n_splits = self.n_groups
         gap_before, gap_after = self.gap_before, self.gap_after
@@ -461,17 +461,10 @@ class CombinatorialGapKFold(GapCrossValidator):
         splits_combinations = list(combinations(splits, self.test_splits))
         for splits_combination in splits_combinations:
             test_indexes = np.empty(0)
-            train_indexes = self.indexes
             for start, stop in splits_combination:
                 test_indexes = np.union1d(
                     test_indexes, self.indexes[start:stop]).astype(int)
-                begin = max(0, start - gap_before)
-                end = min(n_samples, stop + gap_after)
-                train_indexes = np.intersect1d(train_indexes,
-                    np.setdiff1d(self.indexes, self.indexes[begin:end]))
-                if len(train_indexes) <= 0:
-                    raise ValueError("Not enough training samples available")
-            yield train_indexes, test_indexes
+            yield test_indexes
 
     def get_n_splits(self, X=None, y=None, groups=None):
         """Returns the number of splitting iterations in the cross-validator

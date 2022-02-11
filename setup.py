@@ -52,5 +52,5 @@ setup(
                  'Programming Language :: Python :: 3.9',
                  ],
     python_requires=">=3.6",
-    install_requires=['numpy>=1.13.3', 'scikit-learn>=0.22']
+    install_requires=['numpy>=1.13.3', 'scipy>=1.3.0', 'scikit-learn>=0.22']
 )
