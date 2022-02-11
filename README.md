@@ -1,6 +1,7 @@
 [![Downloads](https://pepy.tech/badge/tscv/month)](https://pepy.tech/project/tscv)
 [![Build Status](https://travis-ci.com/WenjieZ/TSCV.svg?branch=master)](https://travis-ci.com/WenjieZ/TSCV)
 [![codecov](https://codecov.io/gh/WenjieZ/TSCV/branch/master/graph/badge.svg?token=dcGlEfHCw2)](https://codecov.io/gh/WenjieZ/TSCV)
+[![Documentation Status](https://readthedocs.org/projects/tscv/badge/?version=latest)](https://tscv.readthedocs.io/en/latest/?badge=latest)
 [![DOI](https://zenodo.org/badge/186586661.svg)](https://zenodo.org/badge/latestdoi/186586661)
 
 ![](train-gap-test.svg)

@@ -8,15 +8,13 @@ environment:
     # The list here is complete (excluding Python 2.6, which
     # isn't covered by this document) at the time of writing.
 
-    - PYTHON: "C:\\Miniconda3-x64"
-      PYTHON_VERSION: "3.6.x"
-      PYTHON_ARCH: "64"
-      SKLEARN_VERSION: "0.22"
+#    - PYTHON: "C:\\Miniconda3-x64"
+#      PYTHON_VERSION: "3.6.x"
+#      PYTHON_ARCH: "64"
+#      SKLEARN_VERSION: "0.22"
 
     - PYTHON: "C:\\Miniconda3-x64"
-      PYTHON_VERSION: "3.9.x"
       PYTHON_ARCH: "64"
-      SKLEARN_VERSION: "0.24"
 
 install:
   # Prepend miniconda installed Python to the PATH of this build
@@ -24,8 +22,8 @@ install:
   # https://github.com/conda/conda/issues/1753
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PYTHON%\\Library\\bin;%PATH%"
   # install the dependencies
-  - "conda install --yes -c conda-forge pip scikit-learn==%SKLEARN_VERSION%"
-  - pip install codecov nose pytest pytest-cov
+  - "conda install --yes -c conda-forge pip pytest"
+  - pip install codecov nose pytest-cov
   - pip install .
 
 test_script:
