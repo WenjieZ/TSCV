@@ -12,6 +12,7 @@ from math import modf
 from abc import ABCMeta, abstractmethod
 from itertools import chain, combinations
 from inspect import signature
+from scipy.special import comb
 
 import numpy as np
 from sklearn.utils import indexable
@@ -491,7 +492,7 @@ class CombinatorialGapKFold(GapCrossValidator):
         n_splits : int
             Returns the number of splitting iterations in the cross-validator.
         """
-        return len(list(combinations(range(self.n_groups), self.test_splits)))
+        return int(comb(self.n_groups, self.test_splits))
 
 
 def gap_train_test_split(*arrays, **options):
