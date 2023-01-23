@@ -9,12 +9,12 @@ environment:
     # isn't covered by this document) at the time of writing.
 
     - PYTHON: "C:\\Miniconda3-x64"
-      PYTHON_VERSION: "3.6.15"
+      PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "64"
       SKLEARN_VERSION: "0.22"
 
-    - PYTHON: "C:\\Miniconda3-x64"
-      PYTHON_VERSION: "3.11.0"
+    - PYTHON: "C:\\Miniconda38-x64"
+      PYTHON_VERSION: "3.8"
       PYTHON_ARCH: "64"
       SKLEARN_VERSION: "1.2"
 
@@ -25,7 +25,7 @@ install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PYTHON%\\Library\\bin;%PATH%"
   # install the dependencies
   - "conda install --yes -c conda-forge pip pytest"
-  - pip install codecov nose pytest-cov python==%PYTHON_VERSION% scikit-learn==%SKLEARN_VERSION%
+  - pip install codecov nose pytest-cov
   - pip install .
 
 test_script:
