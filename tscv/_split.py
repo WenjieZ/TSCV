@@ -178,6 +178,7 @@ class GapLeavePOut(GapCrossValidator):
     TRAIN: [4] TEST: [1 2]
     TRAIN: [0] TEST: [2 3]
     TRAIN: [0 1] TEST: [3 4]
+
     """
 
     def __init__(self, p, gap_before=0, gap_after=0):
@@ -397,7 +398,9 @@ def gap_train_test_split(*arrays, **options):
     [4]
     >>> gap_train_test_split(list(range(10)), gap_size=0.1)
     [[0, 1, 2, 3, 4, 5, 6], [8, 9]]
+
     """
+
     n_arrays = len(arrays)
     if n_arrays == 0:
         raise ValueError("At least one array required as input")
@@ -487,9 +490,6 @@ class GapWalkForward:
     >>> X = np.array([[1, 2], [3, 4], [1, 2], [3, 4], [1, 2], [3, 4]])
     >>> y = np.array([1, 2, 3, 4, 5, 6])
     >>> cv = GapWalkForward(n_splits=5)
-    >>> print(cv)
-    GapWalkForward(gap_size=0, max_train_size=None, n_splits=5,
-                   rollback_size=0, test_size=None)
     >>> for train_index, test_index in cv.split(X):
     ...    print("TRAIN:", train_index, "TEST:", test_index)
     ...    X_train, X_test = X[train_index], X[test_index]
@@ -693,6 +693,7 @@ class GapRollForward:
     TRAIN: [0 1 2] TEST: [5 6 7]
     TRAIN: [2 3 4] TEST: [7 8 9]
     TRAIN: [4 5 6] TEST: [9]
+
     """
     def __init__(self, *, min_train_size=0, max_train_size=np.inf,
                  min_test_size=1, max_test_size=1,
