@@ -6,7 +6,7 @@ from ._split import GapRollForward
 from ._split import gap_train_test_split
 
 
-__version__ = '0.2.dev'
+__version__ = '0.1.3'
 
 __all__ = ['GapCrossValidator',
            'GapLeavePOut',

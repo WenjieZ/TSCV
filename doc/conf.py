@@ -84,7 +84,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Time Series Cross-Validation'
-copyright = u'2019, 2021, Wenjie Zheng'
+copyright = u'2019, 2021, 2023, Wenjie Zheng'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
