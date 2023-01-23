@@ -9,26 +9,12 @@ from numpy.testing import assert_equal
 from numpy.testing import assert_array_equal
 from sklearn.utils._testing import ignore_warnings
 
-from tscv._split import _build_repr
 from tscv import GapCrossValidator
 from tscv import GapLeavePOut
 from tscv import GapKFold
 from tscv import GapWalkForward
 from tscv import GapRollForward
 from tscv import gap_train_test_split
-
-
-def test_build_repr():
-    class MockSplitter:
-        def __init__(self, a, b=0, c=None):
-            self.a = a
-            self.b = b
-            self.c = c
-
-        def __repr__(self):
-            return _build_repr(self)
-
-    assert repr(MockSplitter(5, 6)) == "MockSplitter(a=5, b=6, c=None)"
 
 
 def test_gap_cross_validator():
