@@ -9,12 +9,12 @@ environment:
     # isn't covered by this document) at the time of writing.
 
     - PYTHON: "C:\\Miniconda3-x64"
-      PYTHON_VERSION: "3.6.x"
+      PYTHON_VERSION: "3.6"
       PYTHON_ARCH: "64"
       SKLEARN_VERSION: "0.22"
 
     - PYTHON: "C:\\Miniconda3-x64"
-      PYTHON_VERSION: "3.11.x"
+      PYTHON_VERSION: "3.11"
       PYTHON_ARCH: "64"
       SKLEARN_VERSION: "1.2"
 
