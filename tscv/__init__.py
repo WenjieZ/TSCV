@@ -3,6 +3,7 @@ from ._split import GapLeavePOut
 from ._split import GapKFold
 from ._split import GapWalkForward
 from ._split import GapRollForward
+from ._split import CombinatorialGapKFold
 from ._split import gap_train_test_split
 
 
@@ -13,4 +14,5 @@ __all__ = ['GapCrossValidator',
            'GapKFold',
            'GapWalkForward',
            'GapRollForward',
+           'CombinatorialGapKFold',
            'gap_train_test_split']
